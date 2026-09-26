@@ -2,7 +2,7 @@
   "$schema": "https://static.modelcontextprotocol.io/schemas/2025-12-11/server.schema.json",
   "name": "io.github.netadvanced/mcp-swiss-ng",
   "title": "Switzerland MCP 🇨🇭",
-  "description": "Swiss open data MCP server. 82 tools, zero API keys. Transport, weather, geodata, news, rates.",
+  "description": "Swiss open data MCP server. 83 tools, zero API keys. Transport, weather, geodata, news, rates.",
   "repository": {
     "url": "https://github.com/netadvanced/mcp-swiss-ng",
     "source": "github"

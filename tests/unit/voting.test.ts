@@ -78,8 +78,8 @@ describe("parseCsv", () => {
 });
 
 describe("votingTools definitions", () => {
-  it("exports 3 tools", () => {
-    expect(votingTools).toHaveLength(3);
+  it("exports 4 tools", () => {
+    expect(votingTools).toHaveLength(4);
   });
 
   it("keeps the existing tool names so callers do not break", () => {
@@ -87,6 +87,7 @@ describe("votingTools definitions", () => {
       "get_voting_results",
       "search_votes",
       "get_vote_details",
+      "get_live_vote_results",
     ]);
   });
 

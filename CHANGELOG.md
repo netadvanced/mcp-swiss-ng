@@ -21,6 +21,7 @@ Versioning: [Semantic Versioning](https://semver.org/spec/v2.0.0.html)
 
 ### Added
 
+- `get_live_vote_results`: results as counted so far on a voting Sunday, from the Federal Chancellery's VoteInfo feed. National totals, cantonal tally and one row per canton, cached for a minute. Without a date it returns the current or latest vote day. 83 tools now.
 - `get_vote_details` accepts the `id` that `search_votes` returns.
 - `voting` tools take a `lang` parameter (de, fr, it, rm, en) for the title language, and `search_votes` matches a keyword against all five official-language titles, so a French keyword finds a vote whatever the output language.
 - `get_vote_details` lists up to 20 candidate votes instead of silently picking one when a title or polling day matches several.

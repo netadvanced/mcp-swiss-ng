@@ -56,12 +56,12 @@ describe("Module Registry", () => {
     }
   });
 
-  it("total tool count should be 82", () => {
+  it("total tool count should be 83", () => {
     const total = Object.values(moduleRegistry).reduce(
       (sum, m) => sum + m.tools.length,
       0
     );
-    expect(total).toBe(82);
+    expect(total).toBe(83);
   });
 });
 

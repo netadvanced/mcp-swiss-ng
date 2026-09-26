@@ -1277,6 +1277,31 @@
       }
     },
     {
+      "name": "get_live_vote_results",
+      "description": "Live federal vote count on a voting Sunday: national totals, cantonal tally, per-canton results. Defaults to the current or latest vote day",
+      "inputSchema": {
+        "type": "object",
+        "properties": {
+          "date": {
+            "type": "string",
+            "description": "YYYY-MM-DD, recent days only"
+          },
+          "lang": {
+            "type": "string",
+            "enum": [
+              "de",
+              "fr",
+              "it",
+              "rm",
+              "en"
+            ],
+            "default": "de",
+            "description": "Title language"
+          }
+        }
+      }
+    },
+    {
       "name": "search_dams",
       "description": "Search federally supervised dams by dam or reservoir name (SFOE)",
       "inputSchema": {

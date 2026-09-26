@@ -1,5 +1,6 @@
 import { fetchText } from "../utils/http.js";
 import { cached } from "../utils/cache.js";
+import { liveVotingTools, handleGetLiveVoteResults } from "./voting-live.js";
 
 // ── Base URLs ─────────────────────────────────────────────────────────────────
 
@@ -314,6 +315,7 @@ export const votingTools = [
       },
     },
   },
+  ...liveVotingTools,
 ];
 
 // ── Handlers ──────────────────────────────────────────────────────────────────
@@ -511,6 +513,8 @@ export async function handleVoting(
       return handleSearchVotes(args as { query: string; limit?: number; lang?: string });
     case "get_vote_details":
       return handleGetVoteDetails(args as { id?: number; vote_title?: string; date?: string; lang?: string });
+    case "get_live_vote_results":
+      return handleGetLiveVoteResults(args as { date?: string; lang?: string });
     default:
       throw new Error(`Unknown voting tool: ${name}`);
   }
