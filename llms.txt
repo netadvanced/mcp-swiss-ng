@@ -1,10 +1,10 @@
 # mcp-swiss-ng
-> Swiss open data MCP server — 82 tools, 23 modules, zero API keys
+> Swiss open data MCP server — 83 tools, 23 modules, zero API keys
 
 ## What
 MCP (Model Context Protocol) server providing Swiss public data to AI assistants.
 
-## Tools (82 across 23 modules)
+## Tools (83 across 23 modules)
 - Transport: train/bus connections, departures, stations (SBB/PostBus)
 - Weather: MeteoSwiss live conditions, history
 - Hydrology: river/lake levels and temperatures (BAFU)
@@ -20,7 +20,7 @@ MCP (Model Context Protocol) server providing Swiss public data to AI assistants
 - SNB Rates: CHF exchange rates, historical
 - Recycling: waste collection schedules (OpenERZ)
 - News: SRF headlines and search
-- Voting: popular vote results
+- Voting: federal popular vote results since 1848, per canton, plus live counts on voting Sundays
 - Dams: federal dam registry
 - Hiking: trail closures and alerts
 - Real Estate: property prices, rent index

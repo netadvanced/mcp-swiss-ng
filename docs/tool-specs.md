@@ -1,9 +1,9 @@
 # mcp-swiss Tool Specifications
 
-> Complete human + machine-readable specification for all 82 MCP tools.
+> Complete human + machine-readable specification for all 83 MCP tools.
 > Generated from source
 
-> **Module filtering:** You don't have to load all 82 tools. Use `--modules transport,weather` to pick specific modules, or `--preset commuter` for curated bundles. See [Module Filtering](../README.md#module-filtering) in the README.
+> **Module filtering:** You don't have to load all 83 tools. Use `--modules transport,weather` to pick specific modules, or `--preset commuter` for curated bundles. See [Module Filtering](../README.md#module-filtering) in the README.
 
 ---
 
@@ -2203,9 +2203,17 @@ Search SRF Swiss news by keyword.
 
 ## Voting
 
+Federal popular votes (Volksabstimmungen) for the whole of Switzerland, from the
+Federal Statistical Office. Coverage starts in 1848; votes before 1866 have
+cantonal counts only, with no popular vote figures. Data is current through the
+last completed vote — the `as_of` field in every response says when. Results
+from the last vote can still be provisional (`provisional: true`). For the count
+on a voting Sunday, use `get_live_vote_results`.
+
 ### `get_voting_results`
 
-Get results of Swiss popular votes from Basel-Stadt open data.
+National results for federal popular votes: turnout, yes/no counts, whether the
+vote passed, and the cantonal majority (Ständemehr).
 
 ### Input
 
@@ -2213,32 +2221,68 @@ Get results of Swiss popular votes from Basel-Stadt open data.
 |-----------|------|----------|-------------|
 | year | number | ❌ | Filter by year (e.g. 2024) |
 | limit | number | ❌ | Max results (default: 10, max: 50) |
+| lang | string | ❌ | Title language: de, fr, it, rm, en (default: de) |
+
+`cantonal_majority` is `true` or `false` where a cantonal majority was required,
+and `null` for ordinary law changes where it does not apply.
 
 ---
 
 ### `search_votes`
 
-Search Swiss popular votes by keyword.
+Search federal votes by a keyword from the title. The keyword is matched against
+all five official-language titles, so a French keyword finds the vote even when
+the output language is German.
 
 ### Input
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
-| query | string | ✅ | Search keyword (German/French/Italian) |
+| query | string | ✅ | Search keyword in any official language |
 | limit | number | ❌ | Max results (default: 5, max: 20) |
+| lang | string | ❌ | Title language: de, fr, it, rm, en (default: de) |
 
 ---
 
 ### `get_vote_details`
 
-Get detailed per-district breakdown of a Swiss popular vote.
+One vote in detail: the national result, the vote type and themes, and the
+breakdown across all 26 cantons. When several votes match, the response lists up
+to 20 candidates (with `total_matches`) instead of picking one.
 
 ### Input
 
 | Parameter | Type | Required | Description |
 |-----------|------|----------|-------------|
+| id | number | ❌ | Vote id, as returned by `search_votes` |
 | vote_title | string | ❌ | Partial or full vote title |
 | date | string | ❌ | Vote date in YYYY-MM-DD format |
+| lang | string | ❌ | Title language: de, fr, it, rm, en (default: de) |
+
+At least one of `id`, `vote_title` or `date` is required.
+
+### `get_live_vote_results`
+
+Results as counted so far, from the Federal Chancellery's VoteInfo feed. The
+feed is republished by the minute while the cantons report on a voting Sunday;
+responses are cached for one minute. Without `date` it returns the current vote
+day, or the latest one that has happened, and names `upcoming_vote_day` when the
+next feed is already published. Each vote carries a `status` (`not_started`,
+`counting` or `complete`), `accepted` (null until decided), the national totals,
+the cantonal tally (`cantons_yes` / `cantons_no`, half cantons as 0.5,
+`cantonal_majority_required` says whether it applies), how many cantons are in
+(`cantons_counted` / `cantons_total`) and one row per canton. `data_timestamp`
+is when the feed was published, `fetched_at` when we read it.
+
+Only recent days are available (from 2024-11-24); an unknown `date` returns the
+list of days that are. For older votes use `get_vote_details`.
+
+### Input
+
+| Parameter | Type | Required | Description |
+|-----------|------|----------|-------------|
+| date | string | ❌ | Vote day, YYYY-MM-DD (default: current or latest) |
+| lang | string | ❌ | Title language: de, fr, it, rm, en (default: de) |
 
 ---
 
@@ -2630,4 +2674,4 @@ List GWR buildings around a WGS84 point within a small radius, closest first (on
 ---
 
 *Specification generated from mcp-swiss source code.*  
-*API sources: transport.opendata.ch, api.existenz.ch, api3.geo.admin.ch, zefix.admin.ch, openholidaysapi.org, ws.parlament.ch, aws.slf.ch/whiterisk.ch, geo.admin.ch (NABEL), service.post.ch, strompreis.elcom.admin.ch, pxweb.bfs.admin.ch, opendata.swiss, data.snb.ch, openerz.metaodi.ch, srf.ch, data.bs.ch, geo.admin.ch (SFOE dams), geo.admin.ch (hiking), api3.geo.admin.ch (ASTRA traffic), eida.ethz.ch (SED earthquakes), measurement-api.slf.ch (SLF snow), data.geo.admin.ch (MeteoSwiss pollen), api3.geo.admin.ch (BFS GWR buildings)*
+*API sources: transport.opendata.ch, api.existenz.ch, api3.geo.admin.ch, zefix.admin.ch, openholidaysapi.org, ws.parlament.ch, aws.slf.ch/whiterisk.ch, geo.admin.ch (NABEL), service.post.ch, strompreis.elcom.admin.ch, pxweb.bfs.admin.ch, opendata.swiss, data.snb.ch, openerz.metaodi.ch, srf.ch, dam-api.bfs.admin.ch (federal votes), ogd-static.voteinfo-app.ch (live votes), geo.admin.ch (SFOE dams), geo.admin.ch (hiking), api3.geo.admin.ch (ASTRA traffic), eida.ethz.ch (SED earthquakes), measurement-api.slf.ch (SLF snow), data.geo.admin.ch (MeteoSwiss pollen), api3.geo.admin.ch (BFS GWR buildings)*

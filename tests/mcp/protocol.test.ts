@@ -163,7 +163,7 @@ describe("stdio lifecycle", () => {
 
   it("lists every registered tool, annotated read-only", async () => {
     const listed = tools(await session.request("tools/list"));
-    expect(listed).toHaveLength(82);
+    expect(listed).toHaveLength(83);
     // The default run must expose the whole registry: a module missing from
     // presets.full would show up here and nowhere else.
     expect(listed.map((t) => t.name).sort()).toEqual([...registryToolNames].sort());

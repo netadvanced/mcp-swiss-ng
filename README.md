@@ -19,7 +19,7 @@
 
 `mcp-swiss-ng` is a [Model Context Protocol](https://modelcontextprotocol.io) server that gives any AI assistant direct access to Swiss open data — trains, weather, rivers, maps, and companies.
 
-**82 tools. No API keys. No registration. Runs locally over stdio or as a shared Streamable HTTP server.**
+**83 tools. No API keys. No registration. Runs locally over stdio or as a shared Streamable HTTP server.**
 
 > **About this fork.** `mcp-swiss-ng` continues [vikramgorla/mcp-swiss](https://github.com/vikramgorla/mcp-swiss) (MIT). On top of upstream v0.8.0 it adds a Streamable HTTP transport, discovery mode, the GWR building-register module, read-only tool annotations, request timeouts, trimmed tool schemas and current dependencies (Node 22+). It is not published to npm yet: install from GitHub or use the container image.
 
@@ -39,7 +39,7 @@
 🏦 SNB Rates    — Swiss National Bank CHF exchange rates, historical data
 ♻️ Recycling    — Zurich city waste collection calendar (OpenERZ)
 📰 Swiss News   — SRF news headlines and keyword search
-🗳️ Voting       — Swiss popular vote results (Basel-Stadt open data)
+🗳️ Voting       — Federal popular vote results since 1848
 🌊 Dams         — Swiss federal dam registry (SFOE/swisstopo)
 🥾 Hiking       — Swiss trail closures and hiking alerts (swisstopo)
 🏠 Real Estate  — Swiss property prices, rent index, housing data (BFS)
@@ -274,7 +274,7 @@ To run it as a shared HTTP server instead, see [Remote access (Streamable HTTP)]
 
 ## Module Filtering
 
-By default, mcp-swiss-ng loads all 23 modules (82 tools). For better token efficiency, load only the modules you need:
+By default, mcp-swiss-ng loads all 23 modules (83 tools). For better token efficiency, load only the modules you need:
 
 ### Select specific modules
 ```json
@@ -305,9 +305,9 @@ By default, mcp-swiss-ng loads all 23 modules (82 tools). For better token effic
 | `commuter` | transport, weather, holidays | 14 | 83% |
 | `outdoor` | weather, avalanche, hiking, earthquakes, dams, snow, pollen | 22 | 73% |
 | `business` | companies, geodata, post, energy, statistics, snb, gwr | 27 | 67% |
-| `citizen` | parliament, voting, holidays, news | 17 | 79% |
+| `citizen` | parliament, voting, holidays, news | 18 | 78% |
 | `minimal` | transport | 5 | 94% |
-| `full` | all 23 modules (default) | 82 | — |
+| `full` | all 23 modules (default) | 83 | — |
 
 Combine preset + modules: `--preset commuter --modules parliament`
 
@@ -361,7 +361,7 @@ claude mcp add --transport http swiss https://mcp-swiss.example.ch/mcp \
 
 ## Discovery mode
 
-Loading all 82 tool schemas costs several thousand tokens per conversation. With `--discovery` (or `MCP_SWISS_DISCOVERY=1`) the server starts with just two small meta-tools:
+Loading all 83 tool schemas costs several thousand tokens per conversation. With `--discovery` (or `MCP_SWISS_DISCOVERY=1`) the server starts with just two small meta-tools:
 
 - `swiss_discover` — no arguments: lists modules with descriptions and tool names. With `{"modules": ["transport", "weather"]}`: loads those modules, returns their schemas and sends `notifications/tools/list_changed`, so clients that support it refresh their tool list.
 - `swiss_call` — `{"tool": "get_connections", "arguments": {…}}` runs any loaded tool. This is the fallback for clients that don't re-read their tool list.
@@ -401,7 +401,7 @@ Once connected, try asking your AI:
 
 ## Tools
 
-> 82 tools across 23 modules. Full specifications: [`docs/tool-specs.md`](docs/tool-specs.md) · Machine-readable: [`docs/tools.schema.json`](docs/tools.schema.json)
+> 83 tools across 23 modules. Full specifications: [`docs/tool-specs.md`](docs/tool-specs.md) · Machine-readable: [`docs/tools.schema.json`](docs/tools.schema.json)
 
 ### 🚆 Transport (5 tools)
 
@@ -533,9 +533,10 @@ Once connected, try asking your AI:
 
 | Tool | Description |
 |------|-------------|
-| `get_voting_results` | Swiss popular vote results from Basel-Stadt open data |
-| `search_votes` | Search popular votes by keyword (German/French/Italian) |
-| `get_vote_details` | Detailed per-district breakdown of a specific vote |
+| `get_voting_results` | Federal popular vote results: turnout, counts, cantonal majority |
+| `search_votes` | Search federal votes by keyword, in any official language |
+| `get_vote_details` | One vote in detail, broken down across all 26 cantons |
+| `get_live_vote_results` | Results as counted so far on a voting Sunday, per canton (VoteInfo) |
 
 ### 🌊 Dams & Reservoirs (3 tools)
 
@@ -622,7 +623,7 @@ All official Swiss open data — no API keys required:
 | [data.snb.ch](https://data.snb.ch) | Swiss National Bank CHF exchange rates | [SNB data portal](https://data.snb.ch/en) |
 | [openerz.metaodi.ch](https://openerz.metaodi.ch) | Zurich waste collection calendar (OpenERZ) | [OpenERZ](https://openerz.metaodi.ch) |
 | [srf.ch](https://www.srf.ch) | SRF Swiss news headlines | [SRF](https://www.srf.ch/news) |
-| [data.bs.ch](https://data.bs.ch) | Basel-Stadt popular vote results | [Open Data BS](https://data.bs.ch) |
+| [dam-api.bfs.admin.ch](https://opendata.swiss/en/dataset/eidgenossische-abstimmungsresultate) | Federal popular vote results | [BFS](https://www.bfs.admin.ch) |
 | [geo.admin.ch](https://api3.geo.admin.ch) — SFOE | Swiss federal dam registry | [SFOE](https://www.bfe.admin.ch) |
 | [geo.admin.ch](https://api3.geo.admin.ch) — swisstopo | Swiss trail closures and hiking alerts | [swisstopo](https://www.swisstopo.admin.ch) |
 | [pxweb.bfs.admin.ch](https://www.pxweb.bfs.admin.ch) | BFS property prices + rent index | [BFS housing](https://www.bfs.admin.ch/bfs/en/home/statistics/construction-housing.html) |
